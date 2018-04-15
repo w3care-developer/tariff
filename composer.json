@@ -1,0 +1,40 @@
+{
+    "name": "w3caredev/tariff",
+    "description": "tariff",
+    "type": "craft-plugin",
+    "version": "0.0.1",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "tariff"
+    ],
+    "support": {
+        "docs": "https://github.com/w3caredev/tariff/blob/master/README.md",
+        "issues": "https://github.com/w3caredev/tariff/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "w3caredev",
+            "homepage": "https://w3care.com"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "w3caredev\\tariff\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "tariff",
+        "handle": "tariff",
+        "hasCpSettings": false,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/w3caredev/tariff/master/CHANGELOG.md",
+        "class": "w3caredev\\tariff\\Tariff"
+    }
+}
