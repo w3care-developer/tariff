@@ -16,9 +16,7 @@ use Craft;
 use craft\base\Model;
 
 /**
- * Tariff Settings Model
- *
- * This is a model used to define the plugin's settings.
+ * Birthdate Model
  *
  * Models are containers for data. Just about every time information is passed
  * between services, controllers, and templates in Craft, it’s passed via a model.
@@ -29,13 +27,13 @@ use craft\base\Model;
  * @package   Tariff
  * @since     0.0.1
  */
-class Settings extends Model
+class Birthdate extends Model
 {
     // Public Properties
     // =========================================================================
 
     /**
-     * Some field model attribute
+     * Some model attribute
      *
      * @var string
      */

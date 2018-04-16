@@ -16,7 +16,7 @@ use Craft;
 use craft\web\Controller;
 
 /**
- * FilterEntries Controller
+ * Birthdate Controller
  *
  * Generally speaking, controllers are the middlemen between the front end of
  * the CP/website and your plugin’s services. They contain action methods which
@@ -35,7 +35,7 @@ use craft\web\Controller;
  * @package   Tariff
  * @since     0.0.1
  */
-class FilterEntriesController extends Controller
+class BirthdateController extends Controller
 {
 
     // Protected Properties
@@ -53,26 +53,26 @@ class FilterEntriesController extends Controller
 
     /**
      * Handle a request going to our plugin's index action URL,
-     * e.g.: actions/tariff/filter-entries
+     * e.g.: actions/tariff/birthdate
      *
      * @return mixed
      */
     public function actionIndex()
     {
-        $result = 'Welcome to the FilterEntriesController actionIndex() method';
+        $result = 'Welcome to the BirthdateController actionIndex() method';
 
         return $result;
     }
 
     /**
      * Handle a request going to our plugin's actionDoSomething URL,
-     * e.g.: actions/tariff/filter-entries/do-something
+     * e.g.: actions/tariff/birthdate/do-something
      *
      * @return mixed
      */
     public function actionDoSomething()
     {
-        $result = 'Welcome to the FilterEntriesController actionDoSomething() method';
+        $result = 'Welcome to the BirthdateController actionDoSomething() method';
 
         return $result;
     }
