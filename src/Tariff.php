@@ -10,11 +10,17 @@
 
 namespace w3caredev\tariff;
 
+use w3caredev\tariff\variables\TariffVariable;
+use w3caredev\tariff\twigextensions\TariffTwigExtension;
+use w3caredev\tariff\models\Settings;
 
 use Craft;
 use craft\base\Plugin;
 use craft\services\Plugins;
 use craft\events\PluginEvent;
+use craft\web\UrlManager;
+use craft\web\twig\variables\CraftVariable;
+use craft\events\RegisterUrlRulesEvent;
 
 use yii\base\Event;
 
@@ -32,6 +38,8 @@ use yii\base\Event;
  * @package   Tariff
  * @since     0.0.1
  *
+ * @property  Settings $settings
+ * @method    Settings getSettings()
  */
 class Tariff extends Plugin
 {
@@ -75,6 +83,38 @@ class Tariff extends Plugin
         parent::init();
         self::$plugin = $this;
 
+        // Add in our Twig extensions
+        Craft::$app->view->registerTwigExtension(new TariffTwigExtension());
+
+        // Register our site routes
+        Event::on(
+            UrlManager::class,
+            UrlManager::EVENT_REGISTER_SITE_URL_RULES,
+            function (RegisterUrlRulesEvent $event) {
+                $event->rules['siteActionTrigger1'] = 'tariff/filter-entries';
+            }
+        );
+
+        // Register our CP routes
+        Event::on(
+            UrlManager::class,
+            UrlManager::EVENT_REGISTER_CP_URL_RULES,
+            function (RegisterUrlRulesEvent $event) {
+                $event->rules['cpActionTrigger1'] = 'tariff/filter-entries/do-something';
+            }
+        );
+
+        // Register our variables
+        Event::on(
+            CraftVariable::class,
+            CraftVariable::EVENT_INIT,
+            function (Event $event) {
+                /** @var CraftVariable $variable */
+                $variable = $event->sender;
+                $variable->set('tariff', TariffVariable::class);
+            }
+        );
+
         // Do something after we're installed
         Event::on(
             Plugins::class,
@@ -117,4 +157,29 @@ class Tariff extends Plugin
     // Protected Methods
     // =========================================================================
 
+    /**
+     * Creates and returns the model used to store the plugin’s settings.
+     *
+     * @return \craft\base\Model|null
+     */
+    protected function createSettingsModel()
+    {
+        return new Settings();
+    }
+
+    /**
+     * Returns the rendered settings HTML, which will be inserted into the content
+     * block on the settings page.
+     *
+     * @return string The rendered settings HTML
+     */
+    protected function settingsHtml(): string
+    {
+        return Craft::$app->view->renderTemplate(
+            'tariff/settings',
+            [
+                'settings' => $this->getSettings()
+            ]
+        );
+    }
 }
