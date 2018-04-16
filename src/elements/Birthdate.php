@@ -1,4 +1,6 @@
 <?php
+
+
 /**
  * tariff plugin for Craft CMS 3.x
  *
@@ -344,5 +346,48 @@ class Birthdate extends Element
      */
     public function afterMoveInStructure(int $structureId)
     {
+    }
+
+    /**
+     * @return array
+     */
+    public function defineCriteriaAttributes()
+    {
+        return [
+            'hide' => AttributeType::Mixed,
+            'sort' => AttributeType::Mixed
+        ];
+    }
+
+
+
+    /**
+     * @param DbCommand $query
+     * @param ElementCriteriaModel $criteria
+     *
+     * @return bool|false|null|void
+     */
+    public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
+    {
+        $query
+            ->addSelect(
+                'entries.id,
+                entries.sectionId');
+
+
+        if ($criteria->customer) {
+            if ($criteria->customer instanceof Commerce_CustomerModel) {
+                if ($criteria->customer->id) {
+                    $criteria->customerId = $criteria->customer->id;
+                    $criteria->customer = null;
+                } else {
+                    return false;
+                }
+            }
+        }
+       
+        
+        $query->andWhere(['in', 'lineitems.purchasableId', $purchasableIds]);
+        }
     }
 }

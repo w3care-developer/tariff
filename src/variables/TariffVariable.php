@@ -11,6 +11,7 @@
 namespace w3caredev\tariff\variables;
 
 use w3caredev\tariff\Tariff;
+use craft\elements\Entry;
 
 use Craft;
 
@@ -53,4 +54,43 @@ class TariffVariable
         }
         return $result;
     }
+
+
+    /**
+     * @param array|null $criteria
+     *
+     * @return ElementCriteriaModel|null
+     */
+    public function birthdate($criteria = null)
+    {
+
+
+        if(!isset($criteria)){
+            return false;
+        }
+        $item = array();
+        $userAge = (date('Y') - date('Y',strtotime($criteria)));
+        $query = \craft\elements\Entry::find();
+        $query->section('tariffSection'); 
+        $tariffSections = $query->all();
+
+        foreach ($tariffSections as $record) {
+            $isUserRecord = false;
+            $price = 0;
+            foreach ($record->priceByAge as $value) {
+               if($value['userAge']== $userAge){
+                 $isUserRecord = true;
+                 $price = $value['price'];
+               } 
+            }
+            if($isUserRecord){
+                 $item[] = array(
+                    'title' => $price,
+                    'price' => $record['title']
+                );
+            }
+        }
+        return $item;
+    }
 }
+
