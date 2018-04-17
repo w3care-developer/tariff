@@ -28,7 +28,15 @@ To install the plugin, follow these instructions.
 
 ## Configuring tariff
 
--Insert text here-
+-
+	//Set Config in your /vendor/w3caredev/tariff/src/modal/Settings.php
+	
+   $tableField = 'priceByAge';
+   $ageColumn = 'age';
+   $priceColumn = 'price';
+   $sectionName = 'tariffs';
+
+-
 
 ## Using tariff
 
