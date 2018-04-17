@@ -141,14 +141,15 @@ class TariffVariable
      * @return array
      */
     public function sort($key, $sort){
-        $tableField = \w3caredev\tariff\Tariff::getInstance()->getSettings()->tableField;
-        $ageColumn = \w3caredev\tariff\Tariff::getInstance()->getSettings()->ageColumn;
-        $priceColumn = \w3caredev\tariff\Tariff::getInstance()->getSettings()->priceColumn;
         if($sort == "DESC"){
-            rsort($this->_searchObjects);
+            usort($this->_searchObjects, function($a, $b) {
+                return $b['price'] - $a['price'];
+            });
+        }else{
+             usort($this->_searchObjects, function($a, $b) {
+                return $a['price'] - $b['price'];
+            });
         }
-
-
         return $this;
     }
 
