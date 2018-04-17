@@ -9,11 +9,13 @@ class Settings extends Model
     public $tableField = 'priceByAge';
     public $ageColumn = 'age';
     public $priceColumn = 'price';
+    public $sectionName = 'tariffs';
+    
 
     public function rules()
     {
         return [
-            [['priceByAge', 'age', 'price'], 'required'],
+            [['priceByAge', 'age', 'price', 'tariffs'], 'required'],
         ];
     }
 }

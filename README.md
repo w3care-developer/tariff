@@ -32,7 +32,15 @@ To install the plugin, follow these instructions.
 
 ## Using tariff
 
--Insert text here-
+-{% set birthdate = '01/30/2008' %}
+
+{% for item in craft.tariff.birthdate(birthdate).hide("noPrice").sort("price", "DESC").find() %}
+ 
+    {{item.title}} 
+    {{item.price}} 
+    {{item.customfiled1}} 
+   
+{% endfor %}-
 
 ## tariff Roadmap
 

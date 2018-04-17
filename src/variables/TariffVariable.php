@@ -29,7 +29,13 @@ use Craft;
  */
 class TariffVariable
 {
-     private $_searchObjects;
+    private $_searchObjects;
+    // const SECTIONNAME = \w3caredev\tariff\Tariff::getInstance()->getSettings()->sectionName;
+    // const SECTIONNAME = \w3caredev\tariff\Tariff::getInstance()->getSettings()->sectionName;
+    // const SECTIONNAME = \w3caredev\tariff\Tariff::getInstance()->getSettings()->sectionName;
+    // const SECTIONNAME = \w3caredev\tariff\Tariff::getInstance()->getSettings()->sectionName;
+     
+
      // private $tableField = \w3caredev\tariff\Tariff::getInstance()->getSettings()->tableField;
      // private $ageColumn = \w3caredev\tariff\Tariff::getInstance()->getSettings()->ageColumn;
      // private $priceColumn = \w3caredev\tariff\Tariff::getInstance()->getSettings()->priceColumn;
@@ -65,12 +71,18 @@ class TariffVariable
      *
      * @return ElementCriteriaModel|null
      */
-    public function birthdate($sectionName = 'tariffs', $tableField="priceByAge", $ageColumn="age", $priceColumn="price", $criteria = null)
+    public function birthdate($criteria = null)
     {
        
         if(!isset($criteria)){
             return false;
         }
+         $sectionName = \w3caredev\tariff\Tariff::getInstance()->getSettings()->sectionName;
+         $tableField = \w3caredev\tariff\Tariff::getInstance()->getSettings()->tableField;
+         $ageColumn = \w3caredev\tariff\Tariff::getInstance()->getSettings()->ageColumn;
+         $priceColumn = \w3caredev\tariff\Tariff::getInstance()->getSettings()->priceColumn;
+       
+
         $item = array();
         $userAge = (date('Y') - date('Y',strtotime($criteria)));
         $query = \craft\elements\Entry::find();
@@ -82,19 +94,25 @@ class TariffVariable
             $isUserRecord = false;
             $price = 0;
             foreach ($record->$tableField as $value) {
-               if($value[$ageColumn]== $userAge  && $value[$priceColumn] !=''){
+               if($value[$ageColumn]== $userAge){
                     $isUserRecord = true;
                     $price = $value[$priceColumn] ? $value[$priceColumn] : 0;
                 }
             }
             if($isUserRecord){
-                $item[] = array(
+                $item1 = array(
                     'title' => $record['title'],
                     'price' => $price
                 );
+                $item2 = $record->getFieldValues();
+                $item[] = array_merge($item1, $item2);
             }
         }
+
+
         $this->_searchObjects =  $item;
+
+        
         return $this;
     }
 
@@ -104,10 +122,18 @@ class TariffVariable
      * @return $this
      */
     public function hide($string){
-        if(!isset($string)){
+        
+        if(!isset($string) && $string!="noPrice"){
             return $this;
         }
-
+        $count = 0;
+        $newArray = array();
+        foreach ($this->_searchObjects as  $row) {
+            if($row['price']!=0){
+                $newArray[] = $row;
+            }
+        }
+        $this->_searchObjects = $newArray;
         return $this;
     }
 
@@ -115,11 +141,14 @@ class TariffVariable
      * @return array
      */
     public function sort($key, $sort){
+        $tableField = \w3caredev\tariff\Tariff::getInstance()->getSettings()->tableField;
+        $ageColumn = \w3caredev\tariff\Tariff::getInstance()->getSettings()->ageColumn;
+        $priceColumn = \w3caredev\tariff\Tariff::getInstance()->getSettings()->priceColumn;
         if($sort == "DESC"){
             rsort($this->_searchObjects);
         }
 
-      
+
         return $this;
     }
 
