@@ -34,7 +34,7 @@
     "extra": {
         "name": "tariff",
         "handle": "tariff",
-        "hasCpSettings": false,
+        "hasCpSettings": true,
         "hasCpSection": false,
         "changelogUrl": "https://raw.githubusercontent.com/w3caredev/tariff/master/CHANGELOG.md",
         "class": "w3caredev\\tariff\\Tariff"

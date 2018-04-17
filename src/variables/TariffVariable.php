@@ -29,6 +29,10 @@ use Craft;
  */
 class TariffVariable
 {
+     private $_searchObjects;
+     // private $tableField = \w3caredev\tariff\Tariff::getInstance()->getSettings()->tableField;
+     // private $ageColumn = \w3caredev\tariff\Tariff::getInstance()->getSettings()->ageColumn;
+     // private $priceColumn = \w3caredev\tariff\Tariff::getInstance()->getSettings()->priceColumn;
     // Public Methods
     // =========================================================================
 
@@ -61,36 +65,70 @@ class TariffVariable
      *
      * @return ElementCriteriaModel|null
      */
-    public function birthdate($criteria = null)
+    public function birthdate($sectionName = 'tariffs', $tableField="priceByAge", $ageColumn="age", $priceColumn="price", $criteria = null)
     {
-
-
+       
         if(!isset($criteria)){
             return false;
         }
         $item = array();
         $userAge = (date('Y') - date('Y',strtotime($criteria)));
         $query = \craft\elements\Entry::find();
-        $query->section('tariffSection'); 
+        $query->section($sectionName); 
+        $query->orderBy($tableField,"ASC"); 
         $tariffSections = $query->all();
 
         foreach ($tariffSections as $record) {
             $isUserRecord = false;
             $price = 0;
-            foreach ($record->priceByAge as $value) {
-               if($value['userAge']== $userAge){
-                 $isUserRecord = true;
-                 $price = $value['price'];
-               } 
+            foreach ($record->$tableField as $value) {
+               if($value[$ageColumn]== $userAge  && $value[$priceColumn] !=''){
+                    $isUserRecord = true;
+                    $price = $value[$priceColumn] ? $value[$priceColumn] : 0;
+                }
             }
             if($isUserRecord){
-                 $item[] = array(
-                    'title' => $price,
-                    'price' => $record['title']
+                $item[] = array(
+                    'title' => $record['title'],
+                    'price' => $price
                 );
             }
         }
-        return $item;
+        $this->_searchObjects =  $item;
+        return $this;
     }
+
+     /**
+     * @param $string
+     *
+     * @return $this
+     */
+    public function hide($string){
+        if(!isset($string)){
+            return $this;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function sort($key, $sort){
+        if($sort == "DESC"){
+            rsort($this->_searchObjects);
+        }
+
+      
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function find(){
+        return $this->_searchObjects;
+    }
+
 }
 

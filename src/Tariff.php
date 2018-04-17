@@ -64,6 +64,11 @@ class Tariff extends Plugin
      */
     public $schemaVersion = '0.0.1';
 
+
+    protected function createSettingsModel(){
+        return new \w3caredev\tariff\models\Settings();
+    }
+
     // Public Methods
     // =========================================================================
 
